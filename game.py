@@ -41,8 +41,25 @@ def main():
         print('The computer will go first.')
     else:
         print('You will go first.')
+
     board = [' '] * 9
-    draw_board(board)
+    while True:
+        if turn == player:
+            print('Player turn')
+            # Draw board
+            draw_board(board)
+            # Get player move
+            # Check if player won
+            # Check if tie
+            # Switch turn
+            turn = computer
+        else:
+            print('Computer turn')
+            # Get computer move
+            # Check if computer won
+            # Check if tie
+            # Switch turn
+            turn = player
 
 
 if __name__ == '__main__':
