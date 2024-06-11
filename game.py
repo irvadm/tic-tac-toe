@@ -6,7 +6,24 @@ def draw_board(board):
     print(f'{board[6]}|{board[7]}|{board[8]}')
 
 
+def ask_player_letter():
+    """
+    Ask player if they want to be X or O.
+    Returns player letter and computer letter.
+    """
+    while True:
+        print('Do you want to be X or O?')
+        player = input().upper()
+        if player in ('X', 'O'):
+            if player == 'X':
+                return player, 'O'
+            else:
+                return player, 'X'
+
+
 def main():
+    # Get player and computer letter
+    player, computer = ask_player_letter()
     board = [' '] * 9
     draw_board(board)
 
