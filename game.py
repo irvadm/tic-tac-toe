@@ -90,17 +90,28 @@ def get_computer_move(board, computer):
 
     # Check if center move is available
     if board[4] == ' ':
+        logger.info('Computer center move: %s' % 4)
         return 4
 
     # Check if corner move is available
+    available_corners = []
     for tile_pos in [0, 2, 6, 8]:
         if is_empty(board, tile_pos):
-            return tile_pos
-    
+            available_corners.append(tile_pos)
+    if available_corners:
+        random_corner_move = random.choice(available_corners)
+        logger.info('Computer corner move: %s' % random_corner_move)
+        return random_corner_move
+
     # Check if side move is available
+    available_sides = []
     for tile_pos in [1, 3, 5, 7]:
         if is_empty(board, tile_pos):
-            return tile_pos
+            available_sides.append(tile_pos)
+    if available_sides:
+        random_side_move = random.choice(available_sides)
+        logger.info('Computer side move: %s' % random_side_move)
+        return random_side_move
 
     # Return None if no moves are available
     return None
@@ -128,24 +139,32 @@ def do_move(board, move, player):
 def wins(board, player) -> bool:
     # Check for horizontal win
     if board[0] == board[1] == board[2] == player:
+        logger.debug('%s wins at top horizontal' % player)
         return True
     if board[3] == board[4] == board[5] == player:
+        logger.debug('%s wins at middle horizontal' % player)
         return True
     if board[6] == board[7] == board[8] == player:
+        logger.debug('%s wins at bottom horizontal' % player)
         return True
     
     # Check for vertical win
     if board[0] == board[3] == board[6] == player:
+        logger.debug('%s wins at left vertical' % player)
         return True
-    if board[1] == board[4] == board[5] == player:
+    if board[1] == board[4] == board[7] == player:
+        logger.debug('%s wins at middle vertical' % player)
         return True
     if board[2] == board[5] == board[8] == player:
+        logger.debug('%s wins at right vertical' % player)
         return True
     
     # Check for diagonal win
     if board[0] == board[4] == board[8] == player:
+        logger.debug('%s wins at diagonal' % player)
         return True
     if board[2] == board[4] == board[6] == player:
+        logger.debug('%s wins at diagonal' % player)
         return True
     return False
 
@@ -168,6 +187,15 @@ def main():
 
     board = [' '] * 9
     while True:
+        if wins(board, player):
+            message = 'You win!'
+            break
+        elif wins(board, computer):
+            message = 'Computer wins, you lose.'
+            break
+        if tie(board):
+            message = 'It\'s a tie!'
+            break
         if turn == player:
             # Draw board
             draw_board(board)
@@ -179,16 +207,6 @@ def main():
                 move = get_player_move()
             # print(f'Valid Move: {move}')
             do_move(board, move - 1, player)
-            # Check if player won
-            if wins(board, player):
-                draw_board(board)
-                print('You win!')
-                break
-            # Check if tie
-            if tie(board):
-                draw_board(board)
-                print('It\'s a tie!')
-                break
             # Switch turn
             turn = computer
         else:
@@ -196,19 +214,11 @@ def main():
             print()
             # Get computer move
             move = get_computer_move(board, computer)
-            if move is None:
-                if tie(board):
-                    print('It\'s a tie!')
-                    break
             do_move(board, move, computer)
-            # Check if computer won
-            if wins(board, computer):
-                draw_board(board)
-                print(f'Computer wins, you lose.')
-                break
             # Switch turn
             turn = player
-
+    draw_board(board)
+    print(message)
 
 if __name__ == '__main__':
     main()
