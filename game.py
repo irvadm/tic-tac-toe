@@ -55,7 +55,7 @@ def do_move(board, move, player):
     board[move] = player
 
 
-def wins(board, player):
+def wins(board, player) -> bool:
     # Check for horizontal win
     if board[0] == board[1] == board[2] == player:
         return True
