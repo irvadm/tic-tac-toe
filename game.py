@@ -51,6 +51,10 @@ def is_valid(board, move) -> bool:
         return False
 
 
+def do_move(board, move, player):
+    board[move] = player
+
+
 def main():
     # Get player and computer letter
     player, computer = ask_player_letter()
@@ -74,6 +78,7 @@ def main():
             while not is_valid(board, move - 1):
                 move = get_player_move()
             print(f'Valid Move: {move}')
+            do_move(board, move - 1, player)
             # Check if player won
             # Check if tie
             # Switch turn
