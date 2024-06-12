@@ -6,6 +6,7 @@ import sys
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG, format='%(levelname)s[%(lineno)d] - %(message)s')
+logging.disable()
 
 
 def draw_board(board):
@@ -73,8 +74,6 @@ def get_computer_move(board, computer):
     for tile_pos in empty_tiles:
         board_copy = copy.copy(board)
         do_move(board_copy, tile_pos, computer)
-        draw_board(board_copy)
-        print()
         # Return winning move
         if wins(board_copy, computer):
             logger.info('Computer winning move: %s' % tile_pos)
@@ -84,8 +83,6 @@ def get_computer_move(board, computer):
     for tile_pos in empty_tiles:
         board_copy = copy.copy(board)
         do_move(board_copy, tile_pos, opponent)
-        draw_board(board_copy)
-        print()
         # Return blocking move
         if wins(board_copy, opponent):
             logger.info('Computer blocking move: %s' % tile_pos)
@@ -174,7 +171,6 @@ def main():
     # board = ['O', 'O', ' ', ' ', ' ', ' ', 'X', 'X', ' ']
     while True:
         if turn == player:
-            print('Player turn')
             # Draw board
             draw_board(board)
             # Get and validate player move
@@ -198,7 +194,8 @@ def main():
             # Switch turn
             turn = computer
         else:
-            print('Computer turn')
+            print('Computer\'s turn...')
+            print()
             # Get computer move
             move = get_computer_move(board, computer)
             if move is None:
