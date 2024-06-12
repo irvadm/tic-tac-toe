@@ -1,4 +1,5 @@
 import random
+import sys
 
 
 def draw_board(board):
@@ -33,6 +34,16 @@ def who_goes_first():
         return 'O'
 
 
+def get_player_move():
+    while True:
+        print('What is your move? (1-9 or "q" to quit)')
+        move = input()
+        if move in ('QUIT', 'quit', 'Q', 'q'):
+            return 'quit'
+        if len(move) == 1 and move in '123456789':
+            return int(move)
+
+
 def main():
     # Get player and computer letter
     player, computer = ask_player_letter()
@@ -49,6 +60,10 @@ def main():
             # Draw board
             draw_board(board)
             # Get player move
+            move = get_player_move()
+            print(f'Move: {move}')
+            if move == 'quit':
+                sys.exit(0)
             # Check if player won
             # Check if tie
             # Switch turn
