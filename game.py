@@ -205,7 +205,6 @@ def main():
                 sys.exit(0)
             while not is_empty(board, move - 1):
                 move = get_player_move()
-            # print(f'Valid Move: {move}')
             do_move(board, move - 1, player)
             # Switch turn
             turn = computer
