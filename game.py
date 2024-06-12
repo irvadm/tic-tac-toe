@@ -55,6 +55,31 @@ def do_move(board, move, player):
     board[move] = player
 
 
+def wins(board, player):
+    # Check for horizontal win
+    if board[0] == board[1] == board[2] == player:
+        return True
+    if board[3] == board[4] == board[5] == player:
+        return True
+    if board[6] == board[7] == board[8] == player:
+        return True
+    
+    # Check for vertical win
+    if board[0] == board[3] == board[6] == player:
+        return True
+    if board[1] == board[4] == board[5] == player:
+        return True
+    if board[2] == board[5] == board[8] == player:
+        return True
+    
+    # Check for diagonal win
+    if board[0] == board[4] == board[8] == player:
+        return True
+    if board[2] == board[4] == board[6] == player:
+        return True
+    return False
+
+
 def main():
     # Get player and computer letter
     player, computer = ask_player_letter()
@@ -64,8 +89,8 @@ def main():
     else:
         print('You will go first.')
 
-    # board = [' '] * 9
-    board = ['X', 'O', 'X', ' ', ' ', ' ', 'O', 'X', 'O']
+    board = [' '] * 9
+    # board = ['X', 'O', 'X', ' ', ' ', ' ', 'O', 'X', 'O']
     while True:
         if turn == player:
             print('Player turn')
@@ -80,6 +105,9 @@ def main():
             print(f'Valid Move: {move}')
             do_move(board, move - 1, player)
             # Check if player won
+            if wins(board, player):
+                print('You win!')
+                break
             # Check if tie
             # Switch turn
             turn = computer
