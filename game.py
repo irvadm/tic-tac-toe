@@ -167,8 +167,6 @@ def main():
         print('You will go first.')
 
     board = [' '] * 9
-    # board = ['X', 'O', 'X', 'O', ' ', 'X', 'O', 'X', 'O']
-    # board = ['O', 'O', ' ', ' ', ' ', ' ', 'X', 'X', ' ']
     while True:
         if turn == player:
             # Draw board
