@@ -119,6 +119,7 @@ def main():
             do_move(board, move - 1, player)
             # Check if player won
             if wins(board, player):
+                draw_board(board)
                 print('You win!')
                 break
             # Check if tie
