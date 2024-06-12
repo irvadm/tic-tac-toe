@@ -44,6 +44,13 @@ def get_player_move():
             return int(move)
 
 
+def is_valid(board, move) -> bool:
+    if board[move] == ' ':
+        return True
+    else:
+        return False
+
+
 def main():
     # Get player and computer letter
     player, computer = ask_player_letter()
@@ -53,17 +60,20 @@ def main():
     else:
         print('You will go first.')
 
-    board = [' '] * 9
+    # board = [' '] * 9
+    board = ['X', 'O', 'X', ' ', ' ', ' ', 'O', 'X', 'O']
     while True:
         if turn == player:
             print('Player turn')
             # Draw board
             draw_board(board)
-            # Get player move
+            # Get and validate player move
             move = get_player_move()
-            print(f'Move: {move}')
             if move == 'quit':
                 sys.exit(0)
+            while not is_valid(board, move - 1):
+                move = get_player_move()
+            print(f'Valid Move: {move}')
             # Check if player won
             # Check if tie
             # Switch turn
