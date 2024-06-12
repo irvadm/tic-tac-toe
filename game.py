@@ -50,7 +50,74 @@ def get_player_move():
             return int(move)
 
 
-def is_valid(board, move) -> bool:
+def get_computer_move(board, computer):
+    """
+    Determines the best move for the computer.
+    It prioritizes moves, highest to lowest: winning move, blocking move,
+    center move, corner move, side move.
+    Returns None if no move is available.
+    """
+
+    if computer == 'X':
+        opponent = 'O'
+    else:
+        opponent = 'X'
+
+    empty_tiles = get_empty_tiles(board)
+    # Return None if no moves are available
+    if empty_tiles == []:
+        return None
+
+    # Check if a winning move is available
+    logger.info('Check if a winning move is available:')
+    for tile_pos in empty_tiles:
+        board_copy = copy.copy(board)
+        do_move(board_copy, tile_pos, computer)
+        draw_board(board_copy)
+        print()
+        # Return winning move
+        if wins(board_copy, computer):
+            logger.info('Computer winning move: %s' % tile_pos)
+            return tile_pos
+    # Check if a blocking move is available
+    logger.info('Check if a blocking move is available:')
+    for tile_pos in empty_tiles:
+        board_copy = copy.copy(board)
+        do_move(board_copy, tile_pos, opponent)
+        draw_board(board_copy)
+        print()
+        # Return blocking move
+        if wins(board_copy, opponent):
+            logger.info('Computer blocking move: %s' % tile_pos)
+            return tile_pos
+
+    # Check if center move is available
+    if board[4] == ' ':
+        return 4
+
+    # Check if corner move is available
+    for tile_pos in [0, 2, 6, 8]:
+        if is_empty(board, tile_pos):
+            return tile_pos
+    
+    # Check if side move is available
+    for tile_pos in [1, 3, 5, 7]:
+        if is_empty(board, tile_pos):
+            return tile_pos
+
+    # Return None if no moves are available
+    return None
+
+
+def get_empty_tiles(board) -> list[int]:
+    empty_tiles = []
+    for i, tile in enumerate(board):
+        if board[i] == ' ':
+            empty_tiles.append(i)
+    return empty_tiles
+
+
+def is_empty(board, move) -> bool:
     if board[move] == ' ':
         return True
     else:
@@ -102,8 +169,9 @@ def main():
     else:
         print('You will go first.')
 
-    # board = [' '] * 9
-    board = ['X', 'O', 'X', 'O', ' ', 'X', 'O', 'X', 'O']
+    board = [' '] * 9
+    # board = ['X', 'O', 'X', 'O', ' ', 'X', 'O', 'X', 'O']
+    # board = ['O', 'O', ' ', ' ', ' ', ' ', 'X', 'X', ' ']
     while True:
         if turn == player:
             print('Player turn')
@@ -113,7 +181,7 @@ def main():
             move = get_player_move()
             if move == 'quit':
                 sys.exit(0)
-            while not is_valid(board, move - 1):
+            while not is_empty(board, move - 1):
                 move = get_player_move()
             # print(f'Valid Move: {move}')
             do_move(board, move - 1, player)
@@ -132,8 +200,17 @@ def main():
         else:
             print('Computer turn')
             # Get computer move
+            move = get_computer_move(board, computer)
+            if move is None:
+                if tie(board):
+                    print('It\'s a tie!')
+                    break
+            do_move(board, move, computer)
             # Check if computer won
-            # Check if tie
+            if wins(board, computer):
+                draw_board(board)
+                print(f'Computer wins, you lose.')
+                break
             # Switch turn
             turn = player
 
