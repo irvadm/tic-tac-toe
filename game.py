@@ -1,5 +1,11 @@
+import copy
+import logging
 import random
 import sys
+
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)s[%(lineno)d] - %(message)s')
 
 
 def draw_board(board):
