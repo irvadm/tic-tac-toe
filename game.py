@@ -80,6 +80,13 @@ def wins(board, player) -> bool:
     return False
 
 
+def tie(board) -> bool:
+    for tile in board:
+        if tile == ' ':
+            return False
+    return True
+
+
 def main():
     # Get player and computer letter
     player, computer = ask_player_letter()
@@ -89,8 +96,8 @@ def main():
     else:
         print('You will go first.')
 
-    board = [' '] * 9
-    # board = ['X', 'O', 'X', ' ', ' ', ' ', 'O', 'X', 'O']
+    # board = [' '] * 9
+    board = ['X', 'O', 'X', 'O', ' ', 'X', 'O', 'X', 'O']
     while True:
         if turn == player:
             print('Player turn')
@@ -102,13 +109,17 @@ def main():
                 sys.exit(0)
             while not is_valid(board, move - 1):
                 move = get_player_move()
-            print(f'Valid Move: {move}')
+            # print(f'Valid Move: {move}')
             do_move(board, move - 1, player)
             # Check if player won
             if wins(board, player):
                 print('You win!')
                 break
             # Check if tie
+            if tie(board):
+                draw_board(board)
+                print('It\'s a tie!')
+                break
             # Switch turn
             turn = computer
         else:
